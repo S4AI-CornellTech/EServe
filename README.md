@@ -207,6 +207,7 @@ Thank you for helping improve this project!
 
 If you use this library in your research, please cite:
 
+```
 @article{li2025ecoserve,
   title={Ecoserve: Designing carbon-aware ai inference systems},
   author={Li, Yueying and Hu, Zhanqiu and Choukse, Esha and Fonseca, Rodrigo and Suh, G Edward and Gupta, Udit},
@@ -224,7 +225,7 @@ If you use this library in your research, please cite:
   year={2025},
   publisher={ACM New York, NY, USA}
 }
-
+```
 
 ## References
 

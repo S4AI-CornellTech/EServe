@@ -208,8 +208,15 @@ Thank you for helping improve this project!
 If you use this library in your research, please cite:
 
 ```
+@inproceedings{li2024towards,
+  title={Towards carbon-efficient llm life cycle},
+  author={Li, Yueying Lisa and Graif, Omer and Gupta, Udit},
+  booktitle={Proceedings of the 3rd Workshop on Sustainable Computer Systems},
+  year={2024}
+}
+
 @article{li2025ecoserve,
-  title={Ecoserve: Designing carbon-aware ai inference systems},
+  title={Ecoserve: Designing Carbon-aware AI Inference Systems},
   author={Li, Yueying and Hu, Zhanqiu and Choukse, Esha and Fonseca, Rodrigo and Suh, G Edward and Gupta, Udit},
   journal={arXiv preprint arXiv:2502.05043},
   year={2025}
@@ -225,6 +232,8 @@ If you use this library in your research, please cite:
   year={2025},
   publisher={ACM New York, NY, USA}
 }
+
+
 ```
 
 ## References

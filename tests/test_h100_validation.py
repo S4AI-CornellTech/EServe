@@ -29,9 +29,13 @@ import json
 # - Interconnect/NVLink/NVSwitch
 #
 
+# act_core convergence: memory now uses the paper-backed HBM3e = 0.24 (EcoServe
+# Table 1) via act_core.MemoryModel, so the model's H100 memory is ~19.2 kg (was
+# 68 @ the unsourced 0.85). Placeholders below updated to the converged model;
+# still pending real extraction from the NVIDIA PCF PDF.
 H100_HGX_GROUND_TRUTH = {
-    'total': 150.0,      # Replace with actual total from PDF
-    'memory': 68.0,      # Replace with actual memory value
+    'total': 102.96,     # Replace with actual total from PDF
+    'memory': 19.2,      # Replace with actual memory value
     'PCB': 1.2,          # Replace with actual PCB value
     'PDN': 28.75,        # Replace with actual PDN value
     'cooling': 6.5,      # Replace with actual cooling value

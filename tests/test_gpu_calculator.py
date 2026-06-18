@@ -55,8 +55,8 @@ def test_gpu_memory_cf():
     calculator = GPUCarbonCalculator(gpu_specs)
     memory_cf = calculator.calculate_memory_cf()
     
-    # HBM3 coefficient is 0.85, so 80 GB should give 68.0 kgCO2e
-    expected = 0.85 * 80
+    # HBM3 coefficient is 0.24 (EcoServe Table 1 / act_core), so 80 GB -> 19.2 kgCO2e
+    expected = 0.24 * 80
     assert abs(memory_cf - expected) < 0.01
 
 

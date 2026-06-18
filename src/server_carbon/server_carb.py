@@ -12,6 +12,12 @@ from typing import Dict, Optional, Union
 import json
 import os
 
+from act_core.memory_model import MemoryModel
+
+# Shared, paper-backed memory model (EcoServe Table 1). Unifies the GPU and CPU
+# memory coefficients onto one source (HBM3e = 0.24 kgCO2e/GB).
+_MEMORY_MODEL = MemoryModel()
+
 
 class MemoryType(enum.Enum):
     """Memory type enumeration for carbon footprint calculations"""
@@ -67,18 +73,9 @@ class GPUCarbonCalculator:
     # Constants from the paper
     PCB_CF_PER_CM2 = 0.048 / 12.0  # kgCO2e/cm² (12 layers)
     
-    # Memory carbon footprint coefficients (kgCO2e/GB)
-    MEMORY_CF_COEFFICIENTS = {
-        MemoryType.HBM3E: 0.85,
-        MemoryType.HBM3: 0.85,
-        MemoryType.HBM2E: 0.85,
-        MemoryType.HBM1_BETA: 0.28,
-        MemoryType.HBM2: 0.28,
-        MemoryType.HBM1_ALPHA: 0.28,
-        MemoryType.DDR4: 0.29,
-        MemoryType.LPDDR5: 0.29,
-        MemoryType.GDDR6: 0.36
-    }
+    # Memory embodied carbon now comes from the shared act_core.MemoryModel
+    # (EcoServe paper Table 1, HBM3e = 0.24); see calculate_memory_cf. The former
+    # hardcoded 0.85 was unsourced and higher than ACT's oldest DRAM node.
     
     # Reference values from LCA report
     LCA_REFERENCE = {
@@ -105,9 +102,8 @@ class GPUCarbonCalculator:
         self.specs = specs
 
     def calculate_memory_cf(self) -> float:
-        """Calculate memory carbon footprint"""
-        coefficient = self.MEMORY_CF_COEFFICIENTS[self.specs.memory_type]
-        return coefficient * self.specs.memory_size
+        """Calculate memory carbon footprint (shared act_core MemoryModel)."""
+        return _MEMORY_MODEL.get_carbon(self.specs.memory_type, self.specs.memory_size)
 
     def calculate_pcb_cf(self) -> float:
         """Calculate PCB carbon footprint"""
@@ -193,18 +189,7 @@ class CPUCarbonCalculator:
         self.CF_SSD_PER_GB = 0.10999  # kgCO2e/GB
         self.CF_PCB_PER_CM2 = 0.056   # kgCO2e/cm²
         
-        # Memory CF coefficients based on memory type
-        self.memory_cf_coefficients = {
-            MemoryType.HBM3E: 0.24,
-            MemoryType.HBM3: 0.24,
-            MemoryType.HBM2E: 0.24,
-            MemoryType.HBM1_BETA: 0.24,
-            MemoryType.HBM2: 0.28,
-            MemoryType.HBM1_ALPHA: 0.28,
-            MemoryType.DDR4: 0.29,
-            MemoryType.LPDDR5: 0.29,
-            MemoryType.GDDR6: 0.36
-        }
+        # Memory embodied carbon now comes from the shared act_core.MemoryModel.
 
     def calculate_ssd_cf(self) -> float:
         """Calculate SSD carbon footprint."""
@@ -232,8 +217,7 @@ class CPUCarbonCalculator:
         if self.memory_capacity_gb <= 0:
             return 0.0
         
-        cf_coefficient = self.memory_cf_coefficients[self.memory_type]
-        return cf_coefficient * self.memory_capacity_gb
+        return _MEMORY_MODEL.get_carbon(self.memory_type, self.memory_capacity_gb)
     
     def calculate_chasis_cf(self) -> float:
         """Calculate chassis carbon footprint."""

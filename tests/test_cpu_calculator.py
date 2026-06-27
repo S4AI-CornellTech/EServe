@@ -45,9 +45,10 @@ def test_cpu_ssd_cf():
     )
     
     ssd_cf = calculator.calculate_ssd_cf()
-    
-    # SSD coefficient is 0.10999, so 120 GB should give ~13.2 kgCO2e
-    expected = 0.10999 * 120
+
+    # SSD now uses act_core's bare-die NAND (nand_10nm = 10 g/GB = 0.010 kgCO2e/GB),
+    # the same source ACT/MicroGreen use, so 120 GB should give ~1.2 kgCO2e.
+    expected = 0.010 * 120
     assert abs(ssd_cf - expected) < 0.01
 
 

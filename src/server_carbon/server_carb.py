@@ -13,10 +13,24 @@ import json
 import os
 
 from act_core.memory_model import MemoryModel
+from act_core.ssd_model import SSDModel
+from act_core.common import SSDProcess
 
 # Shared, paper-backed memory model (EcoServe Table 1). Unifies the GPU and CPU
 # memory coefficients onto one source (HBM3e = 0.24 kgCO2e/GB).
 _MEMORY_MODEL = MemoryModel()
+
+# Shared SSD model: act_core's bare-die NAND tables (ssd_hynix.yaml), the same
+# source ACT/MicroGreen use. Standardize storage on nand_10nm = 10 g/GB =
+# 0.010 kgCO2e/GB — the node the suite's modern reference server (the ACT
+# PowerEdge capstone) uses. This replaces the former whole-device 0.10999, which
+# was ~11x ACT's bare-die figure and the last coefficient EServe didn't share
+# with act_core. SSDModel is pint-based; collapse it to a plain float once here
+# (delivered per-GB, fab_yield 1.0) so the CPU calculator stays float-only — the
+# same reason MemoryModel is float-based.
+_SSD_CF_PER_GB = (
+    SSDModel().get_cpg(SSDProcess.NAND_10NM, 1.0).to("kilogram / gigabyte").magnitude
+)
 
 
 class MemoryType(enum.Enum):
@@ -186,13 +200,14 @@ class CPUCarbonCalculator:
     
     def __post_init__(self):
         """Initialize derived constants."""
-        self.CF_SSD_PER_GB = 0.10999  # kgCO2e/GB
+        self.CF_SSD_PER_GB = _SSD_CF_PER_GB  # kgCO2e/GB (act_core nand_10nm = 0.010)
         self.CF_PCB_PER_CM2 = 0.056   # kgCO2e/cm²
-        
-        # Memory embodied carbon now comes from the shared act_core.MemoryModel.
+
+        # SSD and memory embodied carbon now both come from the shared act_core
+        # models (SSDModel / MemoryModel).
 
     def calculate_ssd_cf(self) -> float:
-        """Calculate SSD carbon footprint."""
+        """Calculate SSD carbon footprint (shared act_core SSDModel, nand_10nm)."""
         return self.CF_SSD_PER_GB * self.ssd_capacity_gb
 
     def calculate_peripheral_pwb_cf(self) -> Dict[str, float]:

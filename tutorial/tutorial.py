@@ -124,7 +124,7 @@ def main():
     gpu_total = round(gpu_full["total"], 1)
     results = {"gpu": gpu_total}
 
-    print(f"[05_eserve tutorial] GPU {label}: embodied {gpu_total} kgCO2e")
+    print(f"[EServe tutorial] GPU {label}: embodied {gpu_total} kgCO2e")
     for k in ("SoC", "PDN", "memory", "cooling", "PCB", "connection"):
         if k in gpu_full:
             print(f"    {k:<11} {gpu_full[k]:>8.2f}")
@@ -175,6 +175,19 @@ def main():
                 embodied_rate=embodied_rate, power_kw=power_kw, util=args.util,
                 grid_ci={f"CI {int(ci)}": ci for ci in grid}, crossover_ci=crossover_ci,
             )
+
+    # --- the real EServe API behind this run (drive it yourself in Python) ---
+    print("\n  the EServe API this used (it's a library, not a CLI — call it yourself):")
+    print("      from server_carbon import GPUCarbonCalculator, json_to_gpuspecs")
+    print(f"      g = json_to_gpuspecs(cfg)                  # cfg = {label}")
+    print(f"      GPUCarbonCalculator(g).calculate_total_cf(execution_time_hours={int(lt_h)})")
+    if cspecs is not None:
+        print("      from server_carbon import CPUCarbonCalculator, MemoryType")
+        print(f"      CPUCarbonCalculator(ssd_capacity_gb={int(cspecs.storage_size)}, "
+              f"memory_capacity_gb={int(cspecs.cpu_memory)}, memory_type=MemoryType.DDR4,")
+        print(f"          die_area_mm2=1600, process_node_nm=7, lifetime_years={int(g.lifetime_years)}, "
+              f"execution_time={int(lt_h)}).calculate_total_cf()")
+        print("      # crossover_ci = node_embodied_kg * 1000 / lifetime_hours / (power_kw * util)")
 
     # --- optional CI assertions ---
     failures = []

@@ -4,8 +4,10 @@ Model a GPU accelerator's **embodied carbon**, add the **host server** it racks 
 **grid crossover** where building the box outweighs running it. This follows the 5-minute EServe intro
 (`TALKING_POINTS.md`).
 
-You'll use EServe's real calculators through a helper, `tutorial.sh`, which models a GPU (and optionally
-its host) and computes the embodied-vs-operational crossover:
+EServe ships as a Python **library** (no CLI for this), so you'll use a thin helper, `tutorial.sh`, which
+drives EServe's real `server_carbon` calculators on a GPU (and optionally its host) and computes the
+embodied-vs-operational crossover. Each run also **prints the exact `server_carbon` API calls it made**,
+so you can drop into Python and drive the library yourself:
 
 ```bash
 cd EServe/tutorial

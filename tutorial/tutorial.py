@@ -22,7 +22,7 @@ from server_carbon import (  # noqa: E402
     json_to_gpuspecs, json_to_cpuspecs, MemoryType,
 )
 
-# --- config + constants (were imported from the suite segment's recompute.py) ---
+# --- config + constants ---
 CONFIG = HERE.parent / "config" / "gpuconfigs.json"   # EServe's bundled GPU configs
 N_GPUS = 8
 UTILIZATION = 0.8
@@ -102,14 +102,14 @@ def host_cpu_configs(cfg, args):
 def main():
     ap = argparse.ArgumentParser(description="EServe hands-on: GPU + host embodied + grid crossover")
     ap.add_argument("--gpu", default="H100HGX", help="GPU key in EServe/config/gpuconfigs.json")
-    ap.add_argument("--gpu-file", help="load a flat single-GPU JSON instead (segment-relative ok)")
+    ap.add_argument("--gpu-file", help="load a flat single-GPU JSON instead (tutorial-relative ok)")
     ap.add_argument("--host", action="store_true", help="also model the host server")
     ap.add_argument("--host-source", default="H100HGX",
                     help="GPU name or JSON file whose cpu_configs to borrow if the GPU has none")
     ap.add_argument("--n-gpus", type=int, default=N_GPUS)
     ap.add_argument("--util", type=float, default=UTILIZATION)
     ap.add_argument("--grid-ci", type=float, nargs="+", default=None,
-                    help="grid carbon intensities gCO2e/kWh (default: the segment's three)")
+                    help="grid carbon intensities gCO2e/kWh (default: the three built-in grids)")
     ap.add_argument("--fig", action="store_true", help="also render the crossover PNG into figures/tutorial/")
     ap.add_argument("--expect", action="append", default=[], metavar="KEY=VAL",
                     help="assert a value: gpu|host|crossover|per_accel|node|embodied_rate (repeatable)")

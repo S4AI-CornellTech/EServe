@@ -1,8 +1,7 @@
 # EServe — hands-on: provisioning is a carbon decision (≈20 min)
 
 Model a GPU accelerator's **embodied carbon**, add the **host server** it racks into, and find the
-**grid crossover** where building the box outweighs running it. This follows the 5-minute EServe intro
-(`TALKING_POINTS.md`).
+**grid crossover** where building the box outweighs running it.
 
 EServe ships as a Python **library** (no CLI for this), so you'll use a thin helper, `tutorial.sh`, which
 drives EServe's real `server_carbon` calculators on a GPU (and optionally its host) and computes the
@@ -138,5 +137,5 @@ we demonstrate the *observations*, not the optimization. **Don't claim 47%.**
 
 ## Where this goes next
 
-In the full-stack-carbon walkthrough, this node's embodied carbon (the `gpu_embodied 103` it commits)
-flows to **Fair-CO2**, which time-allocates it fairly across the co-located queries that share the box.
+This node's embodied carbon (~103 kg per accelerator) is what **Fair-CO2** (the next tool) time-allocates
+fairly across the co-located queries that share the box.

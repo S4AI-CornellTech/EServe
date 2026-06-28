@@ -1,7 +1,7 @@
-# Expected results — segment-5 EServe tutorial
+# Expected results — EServe tutorial
 
 Reference numbers (all reproduced live by EServe's calculators). Recompute with
-`./tutorial.sh …` from `walkthrough/05_eserve/`.
+`./tutorial.sh …` from `EServe/tutorial/`.
 
 ## Stage 1 — read the H100 (`--gpu H100HGX`)
 GPU embodied **103.0 kg**: SoC 41.5 · PDN 28.75 · memory 19.2 (HBM3) · cooling 6.5 · PCB 1.19 · conn 0.93.
